@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mainScrollLayout"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mainRelativeLayout">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:scaleType="centerInside"
+                android:layout_margin="10dp"
+                android:id="@+id/imageViewXML"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageViewXML"
+                android:padding="2dp"
+                android:layout_margin="2dp"
+                android:textSize="18sp"
+                android:text="Image resolution:"
+                android:id="@+id/imageResolutionXML"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageResolutionXML"
+                android:padding="2dp"
+                android:layout_margin="2dp"
+                android:textSize="18sp"
+                android:text="Number of pixels:"
+                android:id="@+id/numberOfPixelsXML"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabCameraOpenXML"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                app:srcCompat="@android:drawable/ic_menu_camera" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Recognized texts:"
+            android:id="@+id/recognizedTextsXML"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Error :"
+            android:id="@+id/errorTextsXML"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+</ScrollView>

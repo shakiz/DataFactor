@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "895659663295",
+    "firebase_url": "https://datafactor-5d761.firebaseio.com",
+    "project_id": "datafactor-5d761",
+    "storage_bucket": "datafactor-5d761.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895659663295:android:5e4b1bc3869b350a",
+        "android_client_info": {
+          "package_name": "app.shakil.com.datafactor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "895659663295-7kbhlkha71osmk3sk456tqg4ejvg8kd6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.shakil.com.datafactor",
+            "certificate_hash": "eb6713e8f47b91eda29d2df516340c240aac6584"
+          }
+        },
+        {
+          "client_id": "895659663295-vigp52m06ukr6ud542dcts25bc6g6lu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoiPjnmnxGNM77xSHhHRB5iC5YRFfCd0k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "895659663295-vigp52m06ukr6ud542dcts25bc6g6lu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
