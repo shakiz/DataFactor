@@ -27,18 +27,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.L;
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage;
-import com.google.firebase.ml.naturallanguage.languageid.FirebaseLanguageIdentification;
-import com.google.firebase.ml.naturallanguage.languageid.IdentifiedLanguage;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
-import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
-import com.google.firebase.ml.vision.text.RecognizedLanguage;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextDetector;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private int height,width,totalPixel;
     private int pixelAmount[];
     private FirebaseVisionImage firebaseVisionImage;
-    private FirebaseVisionTextRecognizer firebaseVisionTextRecognizer;
-    private FirebaseLanguageIdentification firebaseLanguageIdentification;
+    private FirebaseVisionTextDetector detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
         mainScrollLayout=findViewById(R.id.mainScrollLayout);
         errorTXT=findViewById(R.id.errorTextsXML);
         recognizedTXT=findViewById(R.id.recognizedTextsXML);
-        firebaseVisionTextRecognizer=FirebaseVision.getInstance().getOnDeviceTextRecognizer();
-        firebaseLanguageIdentification= FirebaseNaturalLanguage.getInstance().getLanguageIdentification();
     }
 
     @Override
@@ -134,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         imageBitmap= BitmapFactory.decodeFile(photoFile.getAbsolutePath());
         imageViewForSavedImage.setImageBitmap(imageBitmap);
         firebaseVisionImage=FirebaseVisionImage.fromBitmap(imageBitmap);
+        detector=FirebaseVision.getInstance().getVisionTextDetector();
         pixelAmount=new int[]{imageBitmap.getHeight()*imageBitmap.getWidth()};
         for(int i=0;i<pixelAmount.length;i++){
 
@@ -147,42 +140,33 @@ public class MainActivity extends AppCompatActivity {
         //Setting the image resolution
         imageResolution.setText("Width : "+imageBitmap.getWidth()+"\nHeight :"+imageBitmap.getHeight());
         numberOfPixels.setText("Number of pixels : "+totalPixel);
-
-        Task<FirebaseVisionText> firebaseVisionTextTask=firebaseVisionTextRecognizer.processImage(firebaseVisionImage)
-                            .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                                @Override
-                                public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                                    Toast.makeText(getApplicationContext(),"Task completed successfully",Toast.LENGTH_LONG).show();
-                                    firebaseLanguageIdentification.identifyLanguage(firebaseVisionText.getText()).addOnSuccessListener(new OnSuccessListener<String>() {
-                                        @Override
-                                        public void onSuccess(String s) {
-                                            Toast.makeText(getApplicationContext(),s, Toast.LENGTH_LONG).show();
-                                            recognizedTXT.setText(s);
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.v("Exception : ",""+e.getMessage());
-                                            errorTXT.setText(e.getMessage());
-                                        }
-                                    });
-
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getApplicationContext(),"Task failed with an exception",Toast.LENGTH_LONG).show();
-                                    Log.v("Exception:",""+e.getMessage());
-                                }
-                            });
-        getData(firebaseVisionTextTask);
+        detector.detectInImage(firebaseVisionImage).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+            @Override
+            public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                Toast.makeText(getApplicationContext(),"Task successful",Toast.LENGTH_LONG).show();
+                processTxt(firebaseVisionText);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),"Task failed",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    public void getData(Task<FirebaseVisionText> result){
-
+    private void processTxt(FirebaseVisionText text) {
+        List<FirebaseVisionText.Block> blocks = text.getBlocks();
+        if (blocks.size() == 0) {
+            Toast.makeText(MainActivity.this, "No Text :(", Toast.LENGTH_LONG).show();
+            return;
+        }
+        for (FirebaseVisionText.Block block : text.getBlocks()) {
+            String txt = block.getText();
+            recognizedTXT.setTextSize(24);
+            recognizedTXT.setText(txt);
+        }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode==0){
